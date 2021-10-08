@@ -7,72 +7,6 @@
 ;; (add-to-list 'exec-path (concat (getenv "GOPATH") "/bin"))
 (require 'cl)
 
-;; Package Management
-;; Since Emacs 24, Emacs includes the Emacs Lisp Package Archive (ELPA) by default
-(load "package")
-(package-initialize)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
-(setq package-archive-enable-alist '(("melpa" deft magit)))
-
-(defvar packages '(ac-slime
-		   auto-complete
-		   autopair
-		   clojure-mode
-		   coffee-mode
-		   csharp-mode
-		   deft
-		   erlang
-		   feature-mode
-		   flycheck
-		   gist
-		   go-autocomplete
-		   go-eldoc
-		   go-mode
-		   graphviz-dot-mode
-		   haml-mode
-		   haskell-mode
-		   htmlize
-		   idris-mode
-		   magit
-		   markdown-mode
-		   marmalade
-		   nodejs-repl
-		   o-blog
-		   org
-		   paredit
-		   php-mode
-		   puppet-mode
-		   restclient
-		   rvm
-		   scala-mode
-		   smex
-		   sml-mode
-		   solarized-theme
-		   web-mode
-		   writegood-mode
-		   yaml-mode)
-  "Default packages")
-
-(defun packages-installed-p ()
-  (loop for pkg in packages
-	when (not (package-installed-p pkg)) do (return nil)
-	finally (return t)
-	)
-  )
-
-(unless (packages-installed-p)
-  (message "%s" "Refreshing package database...")
-  (package-refresh-contents)
-  (dolist (pkg packages)
-    (when (not (package-installed-p pkg))
-      (package-install pkg))
-    )
-  )
-
 ;; Remove initial screen
 (setq inhibit-splash-screen t
       initial-scratch-message nil
@@ -123,12 +57,6 @@
 
 (require 'org)
 
-(require 'autopair)
-(autopair-global-mode 1)
-
-(require 'auto-complete-config)
-(ac-config-default)
-
 ;; Identation and buffer clean-up
 (defun untabify-buffer ()
   (interactive)
@@ -155,6 +83,9 @@
 (global-set-key (kbd "C-c n") 'cleanup-buffer)
 
 (setq-default show-trailing-whitespace t)
+
+;; Auto update buffer
+(global-auto-revert-mode t)
 
 ;; flyspell
 (setq flyspell-issue-welcome-flag nil)
